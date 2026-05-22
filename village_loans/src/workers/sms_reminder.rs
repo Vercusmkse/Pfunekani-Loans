@@ -2,6 +2,7 @@ use tokio_cron_scheduler::{Job, JobScheduler};
 use crate::repository::loan_repository::LoanRepository;
 use std::sync::Arc;
 use std::env;
+use std::collections::HashMap;
 
 pub async fn start_daily_scheduler(repo: LoanRepository) {
     let sched = JobScheduler::new().await.expect("Failed to initialize scheduler");
@@ -42,11 +43,10 @@ pub async fn start_daily_scheduler(repo: LoanRepository) {
                             println!("[Worker] Sending SMS to {}...", phone_number);
 
                             // 3. Africa's Talking requires Form Data, NOT JSON
-                            let params = [
-                                ("username", at_username.as_str()),
-                                ("to", phone_number.as_str()),
-                                ("message", message.as_str()),
-                            ];
+                            let mut params = HashMap::new();
+                            params.insert("username", at_username.as_str());
+                            params.insert("to", phone_number.as_str());
+                            params.insert("message", message.as_str());
 
                             // 4. Fire the request
                             let res = client.post(url)
@@ -61,7 +61,7 @@ pub async fn start_daily_scheduler(repo: LoanRepository) {
                                     if response.status().is_success() {
                                         println!("[Worker] SMS Sent Successfully to {}", phone_number);
                                     } else {
-                                        let error_text = response.text().await.unwrap_or_default();
+                                        let error_text = response.text().await.unwrap_or_else(|_| String::new());
                                         eprintln!("[Worker] SMS Failed. Status: {}. Details: {}", error_text, error_text);
                                     }
                                 }

@@ -28,6 +28,15 @@ pub struct Loan {
     created_at: NaiveDate,
 }
 
+// This is the DTO for creating a new loan
+#[derive(Deserialize)]
+pub struct NewLoan {
+    pub customer_id: String,
+    pub requested_amount: f64,
+    pub duration_months: i32,
+    pub loan_type: LoanType,
+}
+
 impl Loan {
     pub fn new(customer_id: String, requested_amount: f64, duration_months: i32, loan_type: LoanType) -> Result<Self, String> {
         if requested_amount > 8000.0 { return Err("Maximum loan amount is R8000".to_string()); }
@@ -46,7 +55,7 @@ impl Loan {
             total_due,
             duration_months,
             loan_type,
-            created_at: Utc::now().naive_utc(),
+            created_at: Utc::now().date_naive(),
         })
     }
 
