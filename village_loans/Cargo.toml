@@ -6,5 +6,10 @@ edition = "2024"
 [dependencies]
 axum = "0.8.9"
 chrono = { version = "0.4.44", features = ["serde"] }
+dotenvy = "0.15.7"
+reqwest = { version = "0.13.3", features = ["json"] }
 serde = { version = "1.0.228", features = ["derive"] }
+sqlx = { version = "0.8.6", features = ["postgres", "runtime-tokio-rustls", "chrono"] }
 tokio = { version = "1.52.3", features = ["full"] }
+tokio-cron-scheduler = "0.15.1"
+uuid = "1.23.1"
