@@ -1,0 +1,9 @@
+C:\Users\Dell Latitude\Pfunekani-Loans\village_loans\target\debug\deps\hyper_rustls-577b1716a8aa9f63.d: C:\Users\Dell\ Latitude\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\hyper-rustls-0.27.9\src\lib.rs C:\Users\Dell\ Latitude\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\hyper-rustls-0.27.9\src\config.rs C:\Users\Dell\ Latitude\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\hyper-rustls-0.27.9\src\connector.rs C:\Users\Dell\ Latitude\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\hyper-rustls-0.27.9\src\connector\builder.rs C:\Users\Dell\ Latitude\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\hyper-rustls-0.27.9\src\stream.rs
+
+C:\Users\Dell Latitude\Pfunekani-Loans\village_loans\target\debug\deps\libhyper_rustls-577b1716a8aa9f63.rmeta: C:\Users\Dell\ Latitude\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\hyper-rustls-0.27.9\src\lib.rs C:\Users\Dell\ Latitude\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\hyper-rustls-0.27.9\src\config.rs C:\Users\Dell\ Latitude\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\hyper-rustls-0.27.9\src\connector.rs C:\Users\Dell\ Latitude\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\hyper-rustls-0.27.9\src\connector\builder.rs C:\Users\Dell\ Latitude\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\hyper-rustls-0.27.9\src\stream.rs
+
+C:\Users\Dell\ Latitude\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\hyper-rustls-0.27.9\src\lib.rs:
+C:\Users\Dell\ Latitude\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\hyper-rustls-0.27.9\src\config.rs:
+C:\Users\Dell\ Latitude\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\hyper-rustls-0.27.9\src\connector.rs:
+C:\Users\Dell\ Latitude\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\hyper-rustls-0.27.9\src\connector\builder.rs:
+C:\Users\Dell\ Latitude\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\hyper-rustls-0.27.9\src\stream.rs:

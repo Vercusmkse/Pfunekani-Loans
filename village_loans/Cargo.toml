@@ -12,4 +12,5 @@ serde = { version = "1.0.228", features = ["derive"] }
 sqlx = { version = "0.8.6", features = ["postgres", "runtime-tokio-rustls", "chrono"] }
 tokio = { version = "1.52.3", features = ["full"] }
 tokio-cron-scheduler = "0.15.1"
+tower-http = { version = "0.6.11", features = ["cors", "auth"] }
 uuid = "1.23.1"
