@@ -10,21 +10,23 @@ use sqlx::postgres::PgPoolOptions;
 use dotenvy::dotenv;
 use std::env;
 use tower_http::cors::{CorsLayer, Any};
-use tower_http::sensitive_headers::SensitiveHeadersLayer;
+use tower_http::trace::TraceLayer;
 use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
 use crate::repository::loan_repository::LoanRepository;
 use tower_governor::{governor::GovernorConfigBuilder, GovernorLayer};
-use std::time::Duration;
+use once_cell::sync::Lazy;
 
-pub fn app(repo: LoanRepository) -> Router {
-    let governor_conf = Box::new(
+static GOVERNOR_CONF: Lazy<Box<tower_governor::GovernorConfig>> = Lazy::new(|| {
+    Box::new(
         GovernorConfigBuilder::default()
             .per_second(5)
             .burst_size(10)
             .finish()
             .unwrap(),
-    );
+    )
+});
 
+pub fn app(repo: LoanRepository) -> Router {
     let admin_routes = Router::new()
         .route("/loans", get(api::handlers::list_loans_handler))
         .route("/loans/:id/pay", post(api::handlers::record_payment_handler))
@@ -35,8 +37,8 @@ pub fn app(repo: LoanRepository) -> Router {
         .route("/api/webhooks/gateway", post(api::handlers::gateway_webhook_handler))
         .nest("/api/admin", admin_routes)
         .layer(CorsLayer::new().allow_origin(Any).allow_methods(Any).allow_headers(Any))
-        .layer(SensitiveHeadersLayer::new(std::iter::once(axum::http::header::AUTHORIZATION)))
-        .layer(GovernorLayer { config: Box::leak(governor_conf) })
+        .layer(TraceLayer::new_for_http())
+        .layer(GovernorLayer { config: &GOVERNOR_CONF })
         .with_state(repo)
 }
 

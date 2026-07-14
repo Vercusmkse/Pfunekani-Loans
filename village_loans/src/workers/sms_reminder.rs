@@ -14,7 +14,7 @@ pub async fn start_daily_scheduler(repo: LoanRepository) {
             let repo_clone = Arc::clone(&shared_repo);
 
             Box::pin(async move {
-                println!("[Worker] Running daily SMS reminder check...");
+                tracing::info!("[Worker] Running daily SMS reminder check...");
 
                 // 1. Fetch credentials securely from .env
                 let at_username = env::var("AT_USERNAME").unwrap_or_else(|_| "sandbox".to_string());
@@ -40,7 +40,7 @@ pub async fn start_daily_scheduler(repo: LoanRepository) {
                                 loan.total_due
                             );
 
-                            println!("[Worker] Sending SMS to {}...", phone_number);
+                            tracing::info!("[Worker] Sending SMS to {}...", phone_number);
 
                             // 3. Africa's Talking requires Form Data, NOT JSON
                             let mut params = HashMap::new();
@@ -59,22 +59,22 @@ pub async fn start_daily_scheduler(repo: LoanRepository) {
                             match res {
                                 Ok(response) => {
                                     if response.status().is_success() {
-                                        println!("[Worker] SMS Sent Successfully to {}", phone_number);
+                                        tracing::info!("[Worker] SMS Sent Successfully to {}", phone_number);
                                     } else {
                                         let error_text = response.text().await.unwrap_or_else(|_| String::new());
-                                        eprintln!("[Worker] SMS Failed. Status: {}. Details: {}", error_text, error_text);
+                                        tracing::error!("[Worker] SMS Failed. Status: {}. Details: {}", error_text, error_text);
                                     }
                                 }
-                                Err(err) => eprintln!("[Worker] HTTP Request completely failed: {}", err),
+                                Err(err) => tracing::error!("[Worker] HTTP Request completely failed: {}", err),
                             }
                         }
                     },
-                    Err(e) => eprintln!("[Worker] Failed to fetch due loans from DB: {}", e),
+                    Err(e) => tracing::error!("[Worker] Failed to fetch due loans from DB: {:?}", e),
                 }
             })
         }).expect("Failed to create async job")
     ).await.expect("Failed to add job to scheduler");
 
     sched.start().await.expect("Failed to start scheduler");
-    println!("Background SMS Scheduler started. Target time: 08:00 AM daily.");
+    tracing::info!("Background SMS Scheduler started. Target time: 08:00 AM daily.");
 }

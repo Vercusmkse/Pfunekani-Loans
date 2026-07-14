@@ -4,6 +4,7 @@ use axum::{
     Json,
 };
 use serde_json::json;
+use std::fmt;
 
 pub type Result<T> = std::result::Result<T, Error>;
 
@@ -18,6 +19,12 @@ pub enum Error {
 
     // -- Auth Errors
     Auth,
+}
+
+impl fmt::Display for Error {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{:?}", self)
+    }
 }
 
 impl IntoResponse for Error {

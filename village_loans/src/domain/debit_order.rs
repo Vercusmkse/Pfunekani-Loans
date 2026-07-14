@@ -31,7 +31,12 @@ pub struct DebitOrder {
 
 impl DebitOrder {
     // Constructor: All new mandates MUST start as PendingAuthorization
-    pub fn new(loan_id: String, bank_name: String, account_number: String, monthly_amount: f64) -> Self {
+    pub fn new(
+        loan_id: String,
+        bank_name: String,
+        account_number: String,
+        monthly_amount: f64,
+    ) -> Self {
         Self {
             id: uuid::Uuid::new_v4().to_string(),
             loan_id,
@@ -57,21 +62,47 @@ impl DebitOrder {
     }
 
     // Getters for the Repository layer
-    pub fn id(&self) -> &str { &self.id }
-    pub fn loan_id(&self) -> &str { &self.loan_id }
-    pub fn bank_name(&self) -> &str { &self.bank_name }
-    pub fn account_number(&self) -> &str { &self.account_number }
-    pub fn monthly_amount(&self) -> f64 { self.monthly_amount }
-    pub fn status_str(&self) -> &'static str { self.status.as_str() }
+    pub fn id(&self) -> &str {
+        &self.id
+    }
+    pub fn loan_id(&self) -> &str {
+        &self.loan_id
+    }
+    pub fn bank_name(&self) -> &str {
+        &self.bank_name
+    }
+    pub fn account_number(&self) -> &str {
+        &self.account_number
+    }
+    pub fn monthly_amount(&self) -> f64 {
+        self.monthly_amount
+    }
+    pub fn status_str(&self) -> &'static str {
+        self.status.as_str()
+    }
 
     // Add this inside impl DebitOrder in src/domain/debit_order.rs
-    pub fn new_from_db(id: String, loan_id: String, bank_name: String, account_number: String, monthly_amount: f64, status_str: String) -> Self {
+    pub fn new_from_db(
+        id: String,
+        loan_id: String,
+        bank_name: String,
+        account_number: String,
+        monthly_amount: f64,
+        status_str: String,
+    ) -> Self {
         let status = match status_str.as_str() {
             "Authorized" => MandateStatus::Authorized,
             "Rejected" => MandateStatus::Rejected,
             "Failed" => MandateStatus::Failed,
             _ => MandateStatus::PendingAuthorization,
         };
-        Self { id, loan_id, bank_name, account_number, monthly_amount, status }
+        Self {
+            id,
+            loan_id,
+            bank_name,
+            account_number,
+            monthly_amount,
+            status,
+        }
     }
 }

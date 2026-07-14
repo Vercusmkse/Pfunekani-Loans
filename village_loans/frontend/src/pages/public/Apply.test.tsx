@@ -1,6 +1,6 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
-import Apply from './Apply';
+import Apply from '@/pages/public/Apply.tsx';
 
 describe('Apply', () => {
   it('renders the form and submits it', async () => {

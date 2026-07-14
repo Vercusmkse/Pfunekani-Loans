@@ -1,11 +1,11 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
-import Dashboard from './Dashboard';
-import { api } from '../../services/api';
+import Dashboard from '@/pages/admin/Dashboard.tsx';
+import { api } from '@/services/api';
 import { vi } from 'vitest';
 
 // Mock the api module
-vi.mock('../../services/api', () => ({
+vi.mock('@/services/api', () => ({
   api: {
     get: vi.fn(),
     post: vi.fn(),

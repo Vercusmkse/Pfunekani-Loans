@@ -1,17 +1,17 @@
-use axum::{
-    Json,
-    extract::{State, Path, Request},
-    http::StatusCode,
-    response::IntoResponse,
-    middleware::Next
-};
+use crate::domain::loan::NewLoan;
+use crate::error::{Error, Result};
 use crate::repository::loan_repository::LoanRepository;
 use crate::services::loan_service;
-use crate::domain::loan::NewLoan;
+use axum::{
+    Json,
+    extract::{Path, Request, State},
+    http::StatusCode,
+    middleware::Next,
+    response::IntoResponse,
+};
 use serde::Deserialize;
 use serde_json;
 use std::env;
-use crate::error::{Result, Error};
 
 pub async fn create_loan_handler(
     State(repo): State<LoanRepository>,
@@ -30,10 +30,13 @@ pub async fn gateway_webhook_handler(
 }
 
 pub async fn admin_auth_middleware(req: Request, next: Next) -> Result<impl IntoResponse> {
-    let auth_header = req.headers().get("Authorization")
+    let auth_header = req
+        .headers()
+        .get("Authorization")
         .and_then(|header| header.to_str().ok());
 
-    let secret_token = env::var("ADMIN_SECRET_TOKEN").unwrap_or_else(|_| "default_token".to_string());
+    let secret_token =
+        env::var("ADMIN_SECRET_TOKEN").unwrap_or_else(|_| "default_token".to_string());
     let expected_token = format!("Bearer {}", secret_token);
 
     if auth_header == Some(&expected_token) {

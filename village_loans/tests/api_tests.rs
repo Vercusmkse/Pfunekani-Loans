@@ -3,8 +3,8 @@ use axum::{
     http::{self, Request, StatusCode},
 };
 use tower::ServiceExt; // for `oneshot`
-use village_loans::api;
 use village_loans::repository::loan_repository::LoanRepository;
+use village_loans::app;
 use sqlx::PgPool;
 use std::env;
 
@@ -18,7 +18,7 @@ async fn setup() -> LoanRepository {
 #[tokio::test]
 async fn test_create_loan() {
     let repo = setup().await;
-    let app = api::app(repo);
+    let app = app(repo);
 
     let response = app
         .oneshot(
@@ -45,7 +45,7 @@ async fn test_create_loan() {
 #[tokio::test]
 async fn test_list_loans_unauthorized() {
     let repo = setup().await;
-    let app = api::app(repo);
+    let app = app(repo);
 
     let response = app
         .oneshot(
@@ -64,7 +64,7 @@ async fn test_list_loans_unauthorized() {
 #[tokio::test]
 async fn test_list_loans_authorized() {
     let repo = setup().await;
-    let app = api::app(repo);
+    let app = app(repo);
     let secret_token = env::var("ADMIN_SECRET_TOKEN").unwrap();
 
     let response = app

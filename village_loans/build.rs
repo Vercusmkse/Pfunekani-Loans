@@ -1,6 +1,2 @@
-fn main() {
-    // Load the .env file
-    dotenvy::dotenv().expect("Failed to load .env file");
-    // Re-run the build script if .env changes
-    println!("cargo:rerun-if-changed=.env");
-}
+// This file is intentionally left blank.
+// The build script was causing persistent encoding errors on Windows and is no longer needed.

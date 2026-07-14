@@ -1,8 +1,8 @@
-use sqlx::PgPool;
-use crate::domain::loan::Loan;
-use serde::{Serialize, Deserialize};
 use crate::domain::debit_order::DebitOrder;
+use crate::domain::loan::Loan;
 use crate::error::Result;
+use serde::{Deserialize, Serialize};
+use sqlx::PgPool;
 
 // DTO for the admin dashboard
 #[derive(Serialize, Deserialize, sqlx::FromRow)]
@@ -61,7 +61,7 @@ impl LoanRepository {
             r#"
                 SELECT id, customer_id, total_due, loan_type
                 FROM loans
-            "#
+            "#,
         )
         .fetch_all(&self.pool)
         .await?;
@@ -83,7 +83,7 @@ impl LoanRepository {
                 SELECT customer_id, total_due
                 FROM loans
                 WHERE loan_type = 'ManualVillageDeal'
-            "#
+            "#,
         )
         .fetch_all(&self.pool)
         .await?;
