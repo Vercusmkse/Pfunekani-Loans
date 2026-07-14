@@ -13,8 +13,14 @@ serde_json = "1.0"
 sqlx = { version = "0.8.6", features = ["postgres", "runtime-tokio-rustls", "chrono"] }
 tokio = { version = "1.52.3", features = ["full"] }
 tokio-cron-scheduler = "0.15.1"
-tower-http = { version = "0.6.11", features = ["cors", "auth"] }
+tower-http = { version = "0.5.2", features = ["cors", "auth", "sensitive-headers"] }
 uuid = { version = "1.23.1" }
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+tower-governor = "0.1.1"
 
 [build-dependencies]
 dotenvy = "0.15.7"
+
+[dev-dependencies]
+sqlx-cli = "0.7.4"

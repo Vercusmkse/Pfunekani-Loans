@@ -1,0 +1,51 @@
+# A command runner for project tasks
+
+# Variables
+DB_URL := `grep DATABASE_URL .env | cut -d '=' -f2-`
+
+# Default command
+default: run
+
+# --- DEVELOPMENT ---
+# Run the backend server in watch mode
+watch:
+    cargo watch -q -c -x run
+
+# Run the backend server
+run:
+    cargo run
+
+# --- DATABASE ---
+# Setup the database: create, migrate, and prepare sqlx cache
+db-setup:
+    sqlx database create --database-url={{DB_URL}}
+    sqlx migrate run --database-url={{DB_URL}}
+    cargo sqlx prepare
+
+# Run database migrations
+db-migrate:
+    sqlx migrate run --database-url={{DB_URL}}
+
+# Create a new migration file
+db-new-migration name:
+    sqlx migrate add -r {{name}}
+
+# --- TESTING & QUALITY ---
+# Run all backend tests
+test-backend:
+    cargo test
+
+# Run all frontend tests
+test-frontend:
+    cd frontend && npm test
+
+# Run all tests
+test: test-backend test-frontend
+
+# Lint the backend code
+lint:
+    cargo clippy -- -D warnings
+
+# Format the backend code
+format:
+    cargo fmt

@@ -1,6 +1,26 @@
+use tokio_cron_scheduler::{Job, JobScheduler};
 use crate::repository::loan_repository::LoanRepository;
+use std::sync::Arc;
 
 pub async fn start_collection_scheduler(repo: LoanRepository) {
-    println!("Starting debit collection scheduler...");
-    // Background worker loop can be implemented here
+    let sched = JobScheduler::new().await.expect("Failed to initialize scheduler");
+
+    let shared_repo = Arc::new(repo);
+
+    sched.add(
+        Job::new_async("0 0 2 * * *", move |_uuid, _locked| {
+            let repo_clone = Arc::clone(&shared_repo);
+
+            Box::pin(async move {
+                tracing::info!("[Worker] Running daily debit collection check...");
+
+                // In a real system, you would fetch loans that are due for debit collection
+                // For now, we'll just log a message
+                tracing::info!("[Worker] No debit orders to process today.");
+            })
+        }).expect("Failed to create async job")
+    ).await.expect("Failed to add job to scheduler");
+
+    sched.start().await.expect("Failed to start scheduler");
+    tracing::info!("Background Debit Collection Scheduler started. Target time: 02:00 AM daily.");
 }

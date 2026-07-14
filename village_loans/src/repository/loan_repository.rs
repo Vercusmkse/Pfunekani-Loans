@@ -2,6 +2,7 @@ use sqlx::PgPool;
 use crate::domain::loan::Loan;
 use serde::{Serialize, Deserialize};
 use crate::domain::debit_order::DebitOrder;
+use crate::error::Result;
 
 // DTO for the admin dashboard
 #[derive(Serialize, Deserialize, sqlx::FromRow)]
@@ -30,7 +31,7 @@ impl LoanRepository {
     }
 
     // Asynchronously insert the Domain Object into PostgreSQL
-    pub async fn save(&self, loan: &Loan) -> Result<(), sqlx::Error> {
+    pub async fn save(&self, loan: &Loan) -> Result<()> {
         //noinspection SqlResolve,SqlMissingDataSourceInspection,SqlDialectInspection
         sqlx::query(
             r#"
@@ -54,7 +55,7 @@ impl LoanRepository {
     }
 
     // Fetch all active loans for the dashboard
-    pub async fn get_all_loans(&self) -> Result<Vec<AdminLoanView>, sqlx::Error> {
+    pub async fn get_all_loans(&self) -> Result<Vec<AdminLoanView>> {
         //noinspection SqlResolve,SqlMissingDataSourceInspection,SqlDialectInspection
         let loans = sqlx::query_as(
             r#"
@@ -68,14 +69,14 @@ impl LoanRepository {
         Ok(loans)
     }
 
-    pub async fn record_payment(&self, loan_id: &str, amount: f64) -> Result<(), sqlx::Error> {
+    pub async fn record_payment(&self, loan_id: &str, amount: f64) -> Result<()> {
         // In a real app, this would update the balance. For now, it's a placeholder.
-        println!("Recorded payment of {} for loan {}", amount, loan_id);
+        tracing::info!("Recorded payment of {} for loan {}", amount, loan_id);
         Ok(())
     }
 
     // Fetches manual loans that need a reminder today
-    pub async fn get_manual_loans_due_for_reminder(&self) -> Result<Vec<DueLoanNotification>, sqlx::Error> {
+    pub async fn get_manual_loans_due_for_reminder(&self) -> Result<Vec<DueLoanNotification>> {
         //noinspection SqlResolve,SqlMissingDataSourceInspection,SqlDialectInspection
         let due_loans = sqlx::query_as(
             r#"
@@ -91,7 +92,7 @@ impl LoanRepository {
     }
 
     // 1. Fetch a debit order mandate by its ID
-    pub async fn find_debit_order_by_id(&self, id: &str) -> Result<Option<DebitOrder>, sqlx::Error> {
+    pub async fn find_debit_order_by_id(&self, id: &str) -> Result<Option<DebitOrder>> {
         //noinspection SqlResolve,SqlMissingDataSourceInspection,SqlDialectInspection
         let row = sqlx::query(
             r#"
@@ -119,7 +120,7 @@ impl LoanRepository {
     }
 
     // 2. Update the status of a debit order mandate
-    pub async fn update_debit_order_status(&self, id: &str, status: &str) -> Result<(), sqlx::Error> {
+    pub async fn update_debit_order_status(&self, id: &str, status: &str) -> Result<()> {
         //noinspection SqlResolve,SqlMissingDataSourceInspection,SqlDialectInspection
         sqlx::query(
             r#"
