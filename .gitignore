@@ -1,0 +1,25 @@
+
+# Node
+node_modules
+/village_loans/frontend/node_modules
+/village_loans/backend/node_modules
+
+# IDE
+.idea/
+
+# Build
+/dist
+/build
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# OS
+.DS_Store
+Thumbs.db

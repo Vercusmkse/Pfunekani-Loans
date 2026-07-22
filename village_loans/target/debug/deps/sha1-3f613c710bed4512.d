@@ -1,0 +1,10 @@
+C:\Users\Dell Latitude\Pfunekani-Loans\village_loans\target\debug\deps\sha1-3f613c710bed4512.d: C:\Users\Dell\ Latitude\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\sha1-0.10.6\src\lib.rs C:\Users\Dell\ Latitude\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\sha1-0.10.6\src\compress.rs C:\Users\Dell\ Latitude\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\sha1-0.10.6\src\compress\soft.rs C:\Users\Dell\ Latitude\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\sha1-0.10.6\src\compress\x86.rs
+
+C:\Users\Dell Latitude\Pfunekani-Loans\village_loans\target\debug\deps\libsha1-3f613c710bed4512.rlib: C:\Users\Dell\ Latitude\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\sha1-0.10.6\src\lib.rs C:\Users\Dell\ Latitude\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\sha1-0.10.6\src\compress.rs C:\Users\Dell\ Latitude\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\sha1-0.10.6\src\compress\soft.rs C:\Users\Dell\ Latitude\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\sha1-0.10.6\src\compress\x86.rs
+
+C:\Users\Dell Latitude\Pfunekani-Loans\village_loans\target\debug\deps\libsha1-3f613c710bed4512.rmeta: C:\Users\Dell\ Latitude\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\sha1-0.10.6\src\lib.rs C:\Users\Dell\ Latitude\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\sha1-0.10.6\src\compress.rs C:\Users\Dell\ Latitude\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\sha1-0.10.6\src\compress\soft.rs C:\Users\Dell\ Latitude\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\sha1-0.10.6\src\compress\x86.rs
+
+C:\Users\Dell\ Latitude\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\sha1-0.10.6\src\lib.rs:
+C:\Users\Dell\ Latitude\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\sha1-0.10.6\src\compress.rs:
+C:\Users\Dell\ Latitude\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\sha1-0.10.6\src\compress\soft.rs:
+C:\Users\Dell\ Latitude\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\sha1-0.10.6\src\compress\x86.rs:

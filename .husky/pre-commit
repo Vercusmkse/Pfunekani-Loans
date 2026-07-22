@@ -2,5 +2,5 @@
 # The following line is no longer needed and will be removed in Husky v10
 # . "$(dirname "$0")/_/husky.sh"
 
-# Change to the frontend directory and run lint-staged
-cd village_loans/frontend && npx lint-staged
+# Change to the frontend directory and run lint-staged with an explicit config path
+cd village_loans/frontend && npx lint-staged --config package.json
