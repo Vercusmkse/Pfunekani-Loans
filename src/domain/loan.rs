@@ -1,5 +1,6 @@
 use chrono::{NaiveDate, Utc};
 use serde::{Deserialize, Serialize};
+use uuid::Uuid; // Import Uuid
 
 #[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
 pub enum LoanType {
@@ -18,17 +19,16 @@ impl LoanType {
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct Loan {
-    id: String,
+    id: Uuid, // 👈 Changed from String to Uuid
     customer_id: String,
     principal_amount: f64,
     interest_fee: f64,
     total_due: f64,
-    duration_months: i32, // Changed to i32 for DB compatibility
+    duration_months: i32,
     loan_type: LoanType,
     created_at: NaiveDate,
 }
 
-// This is the DTO for creating a new loan
 #[derive(Deserialize)]
 pub struct NewLoan {
     pub customer_id: String,
@@ -61,7 +61,7 @@ impl Loan {
         let total_due = requested_amount + interest_fee;
 
         Ok(Self {
-            id: uuid::Uuid::new_v4().to_string(),
+            id: Uuid::new_v4(), // 👈 Store Uuid directly without .to_string()
             customer_id,
             principal_amount: requested_amount,
             interest_fee,
@@ -73,8 +73,11 @@ impl Loan {
     }
 
     // --- Getters for the Repository ---
-    pub fn id(&self) -> &str {
-        &self.id
+    pub fn id(&self) -> Uuid { // 👈 Returns Uuid for SQLx binding
+        self.id
+    }
+    pub fn id_str(&self) -> String { // Optional getter if you need string formatted ID
+        self.id.to_string()
     }
     pub fn customer_id(&self) -> &str {
         &self.customer_id
