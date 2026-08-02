@@ -1,42 +1,73 @@
-name: Rust CI
+name: Rust & Frontend CI
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ main ]
   pull_request:
-    branches: [ "main" ]
-
-env:
-  CARGO_TERM_COLOR: always
+    branches: [ main ]
 
 jobs:
-  build:
+  backend-test:
+    name: Test Rust Backend
     runs-on: ubuntu-latest
 
+    # 1. Spin up a live PostgreSQL service container for integration tests
     services:
       postgres:
-        image: postgres:13
+        image: postgres:15-alpine
         env:
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: password
-          POSTGRES_DB: village_loans_test
+          POSTGRES_DB: pfunekani_test
         ports:
           - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    # 2. Set runtime environment variables
+    env:
+      DATABASE_URL: postgres://postgres:password@localhost:5432/pfunekani_test
+      SQLX_OFFLINE: true
 
     steps:
-    - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
-    - name: Install sqlx-cli
-      run: cargo install sqlx-cli
+      - name: Set up Rust
+        uses: dtolnay/rust-toolchain@stable
 
-    - name: Set up database
-      run: |
-        export DATABASE_URL=postgres://postgres:password@localhost:5432/village_loans_test
-        sqlx database create
-        sqlx migrate run
+      - name: Rust Cache
+        uses: Swatinem/rust-cache@v2
 
-    - name: Build
-      run: cargo build --verbose
+      - name: Install sqlx-cli & Run Database Migrations
+        run: |
+          cargo install sqlx-cli --no-default-features --features postgres
+          sqlx migrate run
 
-    - name: Run tests
-      run: cargo test --verbose
+      - name: Run Backend Tests
+        run: cargo test --verbose
+
+  frontend-test:
+    name: Test & Build Frontend
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install Frontend Dependencies
+        run: npm --prefix frontend ci
+
+      - name: Run Frontend Tests
+        run: npm --prefix frontend test -- --run
+
+      - name: Build Frontend
+        run: npm --prefix frontend run build
