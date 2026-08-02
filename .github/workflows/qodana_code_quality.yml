@@ -1,0 +1,43 @@
+#-------------------------------------------------------------------------------#
+#            Discover all capabilities of Qodana in our documentation           #
+#             https://www.jetbrains.com/help/qodana/about-qodana.html           #
+#-------------------------------------------------------------------------------#
+
+name: Qodana
+
+on:
+  workflow_dispatch:
+  pull_request:
+  push:
+    branches:
+      - main
+
+jobs:
+  qodana:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+      checks: write
+      security-events: write # Required if uploading SARIF reports to GitHub Code Scanning
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          # Safely handles PRs, direct pushes to main, and manual workflow triggers
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          fetch-depth: 0 # Full history is required for pull request diff analysis
+
+      - name: 'Qodana Scan'
+        uses: JetBrains/qodana-action@v2026.1
+        env:
+          QODANA_TOKEN: ${{ secrets.QODANA_TOKEN }}
+          SQLX_OFFLINE: 'true' # Prevents SQLx compile errors during Rust static analysis
+        with:
+          pr-mode: false
+          use-caches: true
+          post-pr-comment: true
+          use-annotations: true
+          upload-result: true
+          push-fixes: 'none'
