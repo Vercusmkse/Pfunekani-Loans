@@ -3,4 +3,4 @@
 # . "$(dirname "$0")/_/husky.sh"
 
 # Change to the frontend directory and run lint-staged with an explicit config path
-cd village_loans/frontend && npx lint-staged --config package.json
+cd frontend && npx lint-staged --config package.json

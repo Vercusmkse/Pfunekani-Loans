@@ -1,0 +1,15 @@
+# Ignore build artifacts
+target/
+
+# Ignore frontend code
+frontend/
+
+# Ignore git history
+.git/
+
+# Ignore local environment files
+.env
+.env.txt
+
+# Ignore IDE settings
+.idea/
