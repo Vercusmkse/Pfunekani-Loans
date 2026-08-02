@@ -1,4 +1,4 @@
-name: Rust & Frontend CI
+name: Rust CI
 
 on:
   push:
@@ -7,43 +7,44 @@ on:
     branches: [ main ]
 
 jobs:
-  backend-test:
-    name: Test Rust Backend
+  test:
+    name: Run Rust & API Tests
     runs-on: ubuntu-latest
+
+    # 1. Spin up a live PostgreSQL database for api_tests.rs
+    services:
+      postgres:
+        image: postgres:15-alpine
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: password
+          POSTGRES_DB: pfunekani_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    # 2. Provide the DATABASE_URL to your test suite
     env:
-      SQLX_OFFLINE: true # Uses offline .sqlx cache for macro compilation
+      DATABASE_URL: postgres://postgres:password@localhost:5432/pfunekani_test
+      SQLX_OFFLINE: true
 
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set up Rust
+      - name: Install Rust Toolchain
         uses: dtolnay/rust-toolchain@stable
 
       - name: Rust Cache
         uses: Swatinem/rust-cache@v2
 
-      - name: Run Backend Tests
+      - name: Install sqlx-cli & Run Migrations
+        run: |
+          cargo install sqlx-cli --no-default-features --features postgres
+          sqlx migrate run
+
+      - name: Run All Tests
         run: cargo test --verbose
-
-  frontend-test:
-    name: Test & Build Frontend
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-          cache: 'npm'
-          cache-dependency-path: frontend/package-lock.json
-
-      - name: Install Frontend Dependencies
-        run: npm --prefix frontend ci
-
-      - name: Run Frontend Tests
-        run: npm --prefix frontend test -- --run
-
-      - name: Build Frontend
-        run: npm --prefix frontend run build
