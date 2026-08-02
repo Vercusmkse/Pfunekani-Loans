@@ -32,21 +32,21 @@ impl LoanRepository {
 
     // Asynchronously insert the Domain Object into PostgreSQL
     pub async fn save(&self, loan: &Loan) -> Result<()> {
-        sqlx::query(
+        sqlx::query!(
             r#"
             INSERT INTO loans
             (id, customer_id, principal_amount, interest_fee, total_due, duration_months, loan_type, created_at)
             VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
             "#,
+            loan.id(),
+            loan.customer_id(),
+            loan.principal_amount(),
+            loan.interest_fee(),
+            loan.total_due(),
+            loan.duration_months(),
+            loan.loan_type_str(),
+            loan.created_at()
         )
-            .bind(loan.id())
-            .bind(loan.customer_id())
-            .bind(loan.principal_amount())
-            .bind(loan.interest_fee())
-            .bind(loan.total_due())
-            .bind(loan.duration_months())
-            .bind(loan.loan_type_str())
-            .bind(loan.created_at())
             .execute(&self.pool)
             .await?;
 
@@ -55,7 +55,8 @@ impl LoanRepository {
 
     // Fetch all active loans for the dashboard
     pub async fn get_all_loans(&self) -> Result<Vec<AdminLoanView>> {
-        let loans = sqlx::query_as(
+        let loans = sqlx::query_as!(
+            AdminLoanView,
             r#"
                 SELECT id, customer_id, total_due, loan_type
                 FROM loans
@@ -74,7 +75,8 @@ impl LoanRepository {
 
     // Fetches manual loans that need a reminder today
     pub async fn get_manual_loans_due_for_reminder(&self) -> Result<Vec<DueLoanNotification>> {
-        let due_loans = sqlx::query_as(
+        let due_loans = sqlx::query_as!(
+            DueLoanNotification,
             r#"
                 SELECT customer_id, total_due
                 FROM loans
@@ -89,23 +91,22 @@ impl LoanRepository {
 
     // Fetch a debit order mandate by its ID
     pub async fn find_debit_order_by_id(&self, id: &str) -> Result<Option<DebitOrder>> {
-        let row = sqlx::query(
+        let row = sqlx::query!(
             r#"
                 SELECT id, loan_id, bank_name, account_number, monthly_amount, mandate_status
                 FROM debit_orders
                 WHERE id = $1
             "#,
+            id
         )
-            .bind(id)
-            .map(|r: sqlx::postgres::PgRow| {
-                use sqlx::Row;
+            .map(|r| {
                 DebitOrder::new_from_db(
-                    r.get("id"),
-                    r.get("loan_id"),
-                    r.get("bank_name"),
-                    r.get("account_number"),
-                    r.get("monthly_amount"),
-                    r.get("mandate_status"),
+                    r.id,
+                    r.loan_id,
+                    r.bank_name,
+                    r.account_number,
+                    r.monthly_amount,
+                    r.mandate_status,
                 )
             })
             .fetch_optional(&self.pool)
@@ -116,15 +117,15 @@ impl LoanRepository {
 
     // Update the status of a debit order mandate
     pub async fn update_debit_order_status(&self, id: &str, status: &str) -> Result<()> {
-        sqlx::query(
+        sqlx::query!(
             r#"
                 UPDATE debit_orders
                 SET mandate_status = $2
                 WHERE id = $1
             "#,
+            id,
+            status
         )
-            .bind(id)
-            .bind(status)
             .execute(&self.pool)
             .await?;
 
