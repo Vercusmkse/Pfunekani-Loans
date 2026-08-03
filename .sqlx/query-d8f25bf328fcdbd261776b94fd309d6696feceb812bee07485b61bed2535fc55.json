@@ -5,13 +5,13 @@
     "columns": [],
     "parameters": {
       "Left": [
-        "Varchar",
-        "Varchar",
-        "Float8",
-        "Float8",
-        "Float8",
+        "Uuid",
+        "Text",
+        "Float4",
+        "Float4",
+        "Float4",
         "Int4",
-        "Varchar",
+        "Text",
         "Date"
       ]
     },

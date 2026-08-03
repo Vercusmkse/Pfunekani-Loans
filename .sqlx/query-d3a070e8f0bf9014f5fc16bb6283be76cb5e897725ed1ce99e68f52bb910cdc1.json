@@ -1,27 +1,27 @@
 {
   "db_name": "PostgreSQL",
-  "query": "\n                SELECT id as \"id: Uuid\", customer_id, total_due, loan_type\n                FROM loans\n            ",
+  "query": "\n                SELECT id as \"id!: Uuid\", customer_id, total_due, loan_type\n                FROM loans\n            ",
   "describe": {
     "columns": [
       {
         "ordinal": 0,
-        "name": "id: Uuid",
-        "type_info": "Varchar"
+        "name": "id!: Uuid",
+        "type_info": "Uuid"
       },
       {
         "ordinal": 1,
         "name": "customer_id",
-        "type_info": "Varchar"
+        "type_info": "Text"
       },
       {
         "ordinal": 2,
         "name": "total_due",
-        "type_info": "Float8"
+        "type_info": "Float4"
       },
       {
         "ordinal": 3,
         "name": "loan_type",
-        "type_info": "Varchar"
+        "type_info": "Text"
       }
     ],
     "parameters": {
@@ -34,5 +34,5 @@
       false
     ]
   },
-  "hash": "24cfd02b90dfc755d1d9a80b67cc32c023cfa3cf4692e5df315f40fa945d38cb"
+  "hash": "d3a070e8f0bf9014f5fc16bb6283be76cb5e897725ed1ce99e68f52bb910cdc1"
 }

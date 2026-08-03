@@ -3,11 +3,12 @@ use crate::domain::loan::Loan;
 use crate::error::Result;
 use serde::{Deserialize, Serialize};
 use sqlx::PgPool;
+use uuid::Uuid;
 
-// DTO for the admin dashboard (id is String to match TEXT/VARCHAR DB schema)
+// DTO for the admin dashboard
 #[derive(Serialize, Deserialize, sqlx::FromRow)]
 pub struct AdminLoanView {
-    pub id: String,
+    pub id: Uuid,
     pub customer_id: String,
     pub total_due: f64,
     pub loan_type: String,
@@ -38,11 +39,11 @@ impl LoanRepository {
             (id, customer_id, principal_amount, interest_fee, total_due, duration_months, loan_type, created_at)
             VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
             "#,
-            loan.id_str(), // 👈 Passes String to match TEXT/VARCHAR column
+            loan.id(),                       // Pass Uuid directly
             loan.customer_id(),
-            loan.principal_amount(),
-            loan.interest_fee(),
-            loan.total_due(),
+            loan.principal_amount() as f32, // Convert f64 -> f32 for Postgres REAL
+            loan.interest_fee() as f32,     // Convert f64 -> f32
+            loan.total_due() as f32,        // Convert f64 -> f32
             loan.duration_months(),
             loan.loan_type_str(),
             loan.created_at()
@@ -58,7 +59,7 @@ impl LoanRepository {
         let loans = sqlx::query_as!(
             AdminLoanView,
             r#"
-                SELECT id, customer_id, total_due, loan_type
+                SELECT id as "id!: Uuid", customer_id, total_due, loan_type
                 FROM loans
             "#,
         )
@@ -91,21 +92,23 @@ impl LoanRepository {
 
     // Fetch a debit order mandate by its ID
     pub async fn find_debit_order_by_id(&self, id: &str) -> Result<Option<DebitOrder>> {
+        let parsed_id = Uuid::parse_str(id).map_err(|e| sqlx::Error::Decode(Box::new(e)))?;
+
         let row = sqlx::query!(
             r#"
                 SELECT id, loan_id, bank_name, account_number, monthly_amount, mandate_status
                 FROM debit_orders
                 WHERE id = $1
             "#,
-            id // 👈 Passes &str directly
+            parsed_id
         )
             .map(|r| {
                 DebitOrder::new_from_db(
-                    r.id,
-                    r.loan_id,
+                    r.id.to_string(),
+                    r.loan_id.to_string(),
                     r.bank_name,
                     r.account_number,
-                    r.monthly_amount,
+                    r.monthly_amount as f64,
                     r.mandate_status,
                 )
             })
@@ -117,13 +120,15 @@ impl LoanRepository {
 
     // Update the status of a debit order mandate
     pub async fn update_debit_order_status(&self, id: &str, status: &str) -> Result<()> {
+        let parsed_id = Uuid::parse_str(id).map_err(|e| sqlx::Error::Decode(Box::new(e)))?;
+
         sqlx::query!(
             r#"
                 UPDATE debit_orders
                 SET mandate_status = $2
                 WHERE id = $1
             "#,
-            id, // 👈 Passes &str directly
+            parsed_id,
             status
         )
             .execute(&self.pool)
