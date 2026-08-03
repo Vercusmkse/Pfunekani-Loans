@@ -2199,7 +2199,6 @@ checksum = "ef86cd5876211988985292b91c96a8f2d298df24e75989a43a3c73f2d4d8168b"
 dependencies = [
  "aws-lc-rs",
  "once_cell",
- "ring",
  "rustls-pki-types",
  "rustls-webpki",
  "subtle",
@@ -2601,7 +2600,6 @@ dependencies = [
  "native-tls",
  "once_cell",
  "percent-encoding",
- "rustls",
  "serde",
  "serde_json",
  "sha2",
@@ -2611,7 +2609,7 @@ dependencies = [
  "tokio-stream",
  "tracing",
  "url",
- "webpki-roots 0.26.11",
+ "uuid",
 ]
 
 [[package]]
@@ -2692,6 +2690,7 @@ dependencies = [
  "stringprep",
  "thiserror 2.0.18",
  "tracing",
+ "uuid",
  "whoami",
 ]
 
@@ -2730,6 +2729,7 @@ dependencies = [
  "stringprep",
  "thiserror 2.0.18",
  "tracing",
+ "uuid",
  "whoami",
 ]
 
@@ -2756,6 +2756,7 @@ dependencies = [
  "thiserror 2.0.18",
  "tracing",
  "url",
+ "uuid",
 ]
 
 [[package]]
@@ -3269,6 +3270,7 @@ checksum = "ddd74a9687298c6858e9b88ec8935ec45d22e8fd5e6394fa1bd4e99a87789c76"
 dependencies = [
  "getrandom 0.4.2",
  "js-sys",
+ "serde_core",
  "wasm-bindgen",
 ]
 
@@ -3475,24 +3477,6 @@ name = "webpki-root-certs"
 version = "1.0.7"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "f31141ce3fc3e300ae89b78c0dd67f9708061d1d2eda54b8209346fd6be9a92c"
-dependencies = [
- "rustls-pki-types",
-]
-
-[[package]]
-name = "webpki-roots"
-version = "0.26.11"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "521bc38abb08001b01866da9f51eb7c5d647a19260e00054a8c7fd5f9e57f7a9"
-dependencies = [
- "webpki-roots 1.0.7",
-]
-
-[[package]]
-name = "webpki-roots"
-version = "1.0.7"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "52f5ee44c96cf55f1b349600768e3ece3a8f26010c05265ab73f945bb1a2eb9d"
 dependencies = [
  "rustls-pki-types",
 ]

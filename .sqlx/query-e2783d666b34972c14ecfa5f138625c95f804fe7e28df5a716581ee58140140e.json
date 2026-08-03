@@ -1,0 +1,26 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "\n                SELECT customer_id, total_due\n                FROM loans\n                WHERE loan_type = 'ManualVillageDeal'\n            ",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "customer_id",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 1,
+        "name": "total_due",
+        "type_info": "Float8"
+      }
+    ],
+    "parameters": {
+      "Left": []
+    },
+    "nullable": [
+      false,
+      false
+    ]
+  },
+  "hash": "e2783d666b34972c14ecfa5f138625c95f804fe7e28df5a716581ee58140140e"
+}

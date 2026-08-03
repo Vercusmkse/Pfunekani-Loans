@@ -1,0 +1,15 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "\n                UPDATE debit_orders\n                SET mandate_status = $2\n                WHERE id = $1\n            ",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Text",
+        "Varchar"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "0162da0d47311cb47aa22282cffd10abbe3ba7e33450c8163fd141476efb2b5b"
+}

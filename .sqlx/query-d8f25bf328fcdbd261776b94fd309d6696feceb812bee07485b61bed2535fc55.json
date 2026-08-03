@@ -1,0 +1,21 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "\n            INSERT INTO loans\n            (id, customer_id, principal_amount, interest_fee, total_due, duration_months, loan_type, created_at)\n            VALUES ($1, $2, $3, $4, $5, $6, $7, $8)\n            ",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Varchar",
+        "Varchar",
+        "Float8",
+        "Float8",
+        "Float8",
+        "Int4",
+        "Varchar",
+        "Date"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "d8f25bf328fcdbd261776b94fd309d6696feceb812bee07485b61bed2535fc55"
+}

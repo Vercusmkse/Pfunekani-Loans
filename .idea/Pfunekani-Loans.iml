@@ -5,6 +5,9 @@
     <content url="file://$MODULE_DIR$">
       <sourceFolder url="file://$MODULE_DIR$/village_loans/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/village_loans/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/tests" isTestSource="true" />
+      <excludeFolder url="file://$MODULE_DIR$/target" />
       <excludeFolder url="file://$MODULE_DIR$/village_loans/target" />
     </content>
     <orderEntry type="inheritedJdk" />
