@@ -3,12 +3,11 @@ use crate::domain::loan::Loan;
 use crate::error::Result;
 use serde::{Deserialize, Serialize};
 use sqlx::PgPool;
-use uuid::Uuid;
 
-// DTO for the admin dashboard
+// DTO for the admin dashboard (id is String to match TEXT/VARCHAR DB schema)
 #[derive(Serialize, Deserialize, sqlx::FromRow)]
 pub struct AdminLoanView {
-    pub id: Uuid,
+    pub id: String,
     pub customer_id: String,
     pub total_due: f64,
     pub loan_type: String,
@@ -39,7 +38,7 @@ impl LoanRepository {
             (id, customer_id, principal_amount, interest_fee, total_due, duration_months, loan_type, created_at)
             VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
             "#,
-            loan.id_str(),
+            loan.id_str(), // 👈 Passes String to match TEXT/VARCHAR column
             loan.customer_id(),
             loan.principal_amount(),
             loan.interest_fee(),
@@ -55,12 +54,11 @@ impl LoanRepository {
     }
 
     // Fetch all active loans for the dashboard
-    // Fetch all active loans for the dashboard
     pub async fn get_all_loans(&self) -> Result<Vec<AdminLoanView>> {
         let loans = sqlx::query_as!(
             AdminLoanView,
             r#"
-                SELECT id::uuid as "id!: Uuid", customer_id, total_due, loan_type
+                SELECT id, customer_id, total_due, loan_type
                 FROM loans
             "#,
         )
@@ -99,7 +97,7 @@ impl LoanRepository {
                 FROM debit_orders
                 WHERE id = $1
             "#,
-            id
+            id // 👈 Passes &str directly
         )
             .map(|r| {
                 DebitOrder::new_from_db(
@@ -125,7 +123,7 @@ impl LoanRepository {
                 SET mandate_status = $2
                 WHERE id = $1
             "#,
-            id,
+            id, // 👈 Passes &str directly
             status
         )
             .execute(&self.pool)
