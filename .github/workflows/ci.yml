@@ -11,6 +11,7 @@ jobs:
     name: Test Rust Backend
     runs-on: ubuntu-latest
 
+    # Live PostgreSQL container for integration tests
     services:
       postgres:
         image: postgres:15-alpine
@@ -29,7 +30,6 @@ jobs:
 
     env:
       DATABASE_URL: postgres://postgres:postgres@localhost:5432/pfunekani_test
-      SQLX_OFFLINE: true
 
     steps:
       - uses: actions/checkout@v4
@@ -40,7 +40,7 @@ jobs:
       - name: Rust Cache
         uses: Swatinem/rust-cache@v2
 
-      # 1. Cache the compiled sqlx-cli binary
+      # Cache the compiled sqlx-cli binary
       - name: Cache sqlx-cli
         uses: actions/cache@v4
         id: cache-sqlx
@@ -48,7 +48,6 @@ jobs:
           path: ~/.cargo/bin/sqlx
           key: ${{ runner.os }}-sqlx-cli-0.8.6
 
-      # 2. Only compile/install sqlx-cli if it wasn't found in cache
       - name: Install sqlx-cli
         if: steps.cache-sqlx.outputs.cache-hit != 'true'
         run: cargo install sqlx-cli --no-default-features --features postgres

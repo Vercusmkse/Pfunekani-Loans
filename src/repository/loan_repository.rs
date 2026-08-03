@@ -3,11 +3,12 @@ use crate::domain::loan::Loan;
 use crate::error::Result;
 use serde::{Deserialize, Serialize};
 use sqlx::PgPool;
+use uuid::Uuid; // 👈 Imported Uuid
 
 // DTO for the admin dashboard
 #[derive(Serialize, Deserialize, sqlx::FromRow)]
 pub struct AdminLoanView {
-    pub id: String,
+    pub id: Uuid, // 👈 Changed from String to Uuid to match Postgres UUID type
     pub customer_id: String,
     pub total_due: f64,
     pub loan_type: String,
@@ -38,7 +39,7 @@ impl LoanRepository {
             (id, customer_id, principal_amount, interest_fee, total_due, duration_months, loan_type, created_at)
             VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
             "#,
-            loan.id(),
+            loan.id(), // 👈 Passes Uuid directly
             loan.customer_id(),
             loan.principal_amount(),
             loan.interest_fee(),
