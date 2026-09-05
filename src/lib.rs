@@ -29,6 +29,8 @@ pub fn app(repo: LoanRepository) -> Router {
         .route_layer(middleware::from_fn(api::handlers::admin_auth_middleware));
 
     Router::new()
+        .route("/", get(|| async { "Pfunekani Loans API is live" }))
+        .route("/health", get(|| async { "OK" }))
         .route("/api/loans", post(api::handlers::create_loan_handler))
         .route("/api/webhooks/gateway", post(api::handlers::gateway_webhook_handler))
         .nest("/api/admin", admin_routes)
